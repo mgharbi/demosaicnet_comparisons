@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="viewer.js" type="text/javascript" charset="utf-8"></script>
+    <script src="main.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+    <header>
+        
+    </header>
+
+    <div class="container">
+        <div class="row text-center">
+            <h1>
+                <span id="datasetTitle">
+                    MCM
+                </span>
+                </br>
+                <small>
+                    <span id="leftTitle">
+                    </span>
+                    vs. 
+                    <span id="rightTitle">
+                    </span>
+                </small>
+            </h1>
+        </div>
+        <div class="row text-center">
+            <div class="col-md-offset-3 col-md-6 form-group">
+                <label>
+                    Dataset
+                </label>
+                <select id="selDataset" class="form-control">
+                </select>
+                <label>
+                    Image
+                </label>
+                <select id="selImage" class="form-control">
+                </select>
+            </div>
+            <div class="col-md-offset-3 col-md-3 form-group">
+                <label>
+                    Left method
+                </label>
+                <select id="selLeftMethod" class="form-control">
+                </select>
+            </div>
+            <div class="col-md-3 form-group">
+                <label>
+                    Right method
+                </label>
+                <select id="selRightMethod" class="form-control">
+                </select>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-md-offset-3 col-md-3">
+                <table id="leftTable" class="table">
+                    <tr>
+                        <th>PSNR</th>
+                        <td id="psnr_left">0 dB</td>
+                    </tr>
+                    <tr>
+                        <th>time</th>
+                        <td id="time_left">0 ms</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-3">
+                <table id="rightTable" class="table">
+                    <tr>
+                        <th>PSNR</th>
+                        <td id="psnr_right">0 dB</td>
+                    </tr>
+                    <tr>
+                        <th>time</th>
+                        <td id="time_right">0 ms</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-md-12">
+                <figure>
+                    <div id="split_viewer"></div>
+                    <figcaption>
+                        Move the divider to compare methods.
+                    </figcaption>
+                </figure>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        
+    </footer>
+</body>
+
+
+</html>
