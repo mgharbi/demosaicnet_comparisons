@@ -4,56 +4,90 @@ function float_format(x, prec) {
 
 $(document).ready(function() {
     var datasets = [ 
-        "mcm",
     ];
+    $.ajax({
+        url: 'data/datasets.json',
+        async: false,
+        success: function (data) {
+          var obj = JSON.parse(data);
+          datasets = obj;
+        }
+    });
+
 
     var methods = [ 
-        "ground_truth",
-        "bilinear",
-        "ahd",
-        "dlmmse",
-        "ldi_nat",
-        "flexisp",
-        "our_cnn"
     ];
+    $.ajax({
+        url: 'data/methods.json',
+        async: false,
+        success: function (data) {
+          var obj = JSON.parse(data);
+          methods = obj;
+        }
+    });
+
 
     var images = [ 
-        'mcm_1.png',
-        'mcm_2.png',
-        'mcm_3.png',
-        'mcm_4.png',
-        'mcm_5.png',
-        'mcm_6.png',
-        'mcm_7.png',
-        'mcm_8.png',
-        'mcm_9.png',
-        'mcm_10.png',
-        'mcm_11.png',
-        'mcm_12.png',
-        'mcm_13.png',
-        'mcm_14.png',
-        'mcm_15.png',
-        'mcm_16.png',
-        'mcm_17.png',
-        'mcm_18.png'
     ];
 
     // Fill in drop-down lists
-    datasets.forEach(function(t) { 
+    Object.keys(datasets).forEach(function(t) { 
         $('#selDataset').append('<option>'+t+'</option>');
     });
-    images.forEach(function(t) { 
-        $('#selImage').append('<option>'+t+'</option>');
-    });
-    methods.forEach(function(t) { 
+    var all_methods = Object.keys(methods);
+    all_methods.push('ground_truth');
+    all_methods.forEach(function(t) { 
         $('#selLeftMethod').append('<option>'+t+'</option>');
         $('#selRightMethod').append('<option>'+t+'</option>');
     });
 
     var dataset      = $("#selDataset").val();
-    var imname      = $("#selImage").val();
+    update_image_list();
     var left_method  = $('#selLeftMethod').val();
     var right_method = $('#selRightMethod').val();
+
+    function update_score_table() {
+        var str = 
+            "<tr>" +
+                "<th>name</th> " +
+                "<th>n</th>" +
+                "<th>PSNR</th>" +
+                "<th>R</th>" +
+                "<th>G</th>" +
+                "<th>B</th>" +
+                "<th>time</th>" +
+            "</tr>";
+
+        var scores = [];
+        for(m in methods) {
+            var obj = methods[m][dataset];
+            obj['name'] = m;
+            scores.push(obj);
+        }
+        scores.sort(function(a, b) {
+            if ( a.psnr < b.psnr )
+                return 1;
+            if ( a.psnr > b.psnr )
+                return -1;
+            return 0;
+        });
+        console.log(scores);
+
+        for(s in scores) {
+            str +=
+            "<tr>" +
+                "<td>"+ scores[s].name + "</td> " +
+                "<td>"+ scores[s].n + "</td> " +
+                "<td>"+ float_format(scores[s]["psnr"],1)   + " dB </td> " +
+                "<td>"+ float_format(scores[s]["psnr_r"],1) + " dB </td> " +
+                "<td>"+ float_format(scores[s]["psnr_g"],1) + " dB </td> " +
+                "<td>"+ float_format(scores[s]["psnr_b"],1) + " dB </td> " +
+                "<td>"+ float_format(scores[s]["time"],0) + "ms </td> " +
+            "</tr>";
+        }
+        $("#score_table").html(str);
+    };
+    update_score_table();
 
     var path_left   = '';
     var path_right  = '';
@@ -84,36 +118,41 @@ $(document).ready(function() {
 
     function make_viewer() {
         $('#split_viewer').html('')
-        console.log('make_viewer')
         if (!ready_l || !ready_r) {
-            console.log("one image is not ready");
             return;
         }
         if(width_l != width_r || height_l != height_r) {
             console.log("viewer sizes do not match !");
         }
-        twoface = TwoFace('split_viewer', width_l, width_r);
+        twoface = TwoFace('split_viewer', width_l, height_l);
         twoface.add(path_left);
         twoface.add(path_right);
     };
 
     function update_left() {
+        if(!imname){
+            return;
+        }
         ready_l = false;
-        console.log('update left')
         path_left   = 'output/'+left_method+'/'+dataset+'/'+imname;
         im_left.src = path_left;
 
         if(left_method == "ground_truth") {
             $("#psnr_left").html('--');
+            $("#psnr_red_left").html('--');
+            $("#psnr_green_left").html('--');
+            $("#psnr_blue_left").html('--');
             $("#time_left").html('--');
         } else {
             json_left   = 'output/'+left_method+'/'+dataset+'/'+imname.split('.')[0]+'.json';
-            console.log("JSONG: "+json_left)
             $.ajax({
                 url: json_left,
                 success: function (data) {
                   var obj = JSON.parse(data);
                   $("#psnr_left").html(float_format(obj.psnr,1)+" dB");
+                  $("#psnr_red_left").html(float_format(obj.psnr_r,1)+" dB");
+                  $("#psnr_green_left").html(float_format(obj.psnr_g,1)+" dB");
+                  $("#psnr_blue_left").html(float_format(obj.psnr_b,1)+" dB");
                   $("#time_left").html(float_format(obj.time,0)+" ms");
                 }
             });
@@ -122,27 +161,58 @@ $(document).ready(function() {
     };
 
     function update_right() {
+        if(!imname){
+            return;
+        }
         ready_r = false;
-        console.log('update right')
         path_right  = 'output/'+right_method+'/'+dataset+'/'+imname;
         im_right.src = path_right;
 
         if(right_method == "ground_truth") {
             $("#psnr_right").html('--');
+            $("#psnr_red_right").html('--');
+            $("#psnr_green_right").html('--');
+            $("#psnr_blue_right").html('--');
             $("#time_right").html('--');
         } else {
             json_right   = 'output/'+right_method+'/'+dataset+'/'+imname.split('.')[0]+'.json';
-            console.log("JSONG: "+json_right)
             $.ajax({
                 url: json_right,
                 success: function (data) {
                   var obj = JSON.parse(data);
                   $("#psnr_right").html(float_format(obj.psnr,1)+" dB");
+                  $("#psnr_red_right").html(float_format(obj.psnr_r,1)+" dB");
+                  $("#psnr_green_right").html(float_format(obj.psnr_g,1)+" dB");
+                  $("#psnr_blue_right").html(float_format(obj.psnr_b,1)+" dB");
                   $("#time_right").html(float_format(obj.time,0)+" ms");
                 }
             });
         }
 
+    };
+
+    function update_image_list(){
+        images = []
+        $('#selImage')
+            .find('option')
+            .remove();
+        $.ajax({
+            url: 'data/datasets.json',
+            async: false,
+            success: function (data) {
+                var obj = JSON.parse(data);
+                for(k in obj) {
+                    if( k = dataset){
+                        images = obj[k];
+                        break;
+                    }
+                  }
+                }
+        });
+        images.forEach(function(t) { 
+            $('#selImage').append('<option>'+t+'</option>');
+        });
+        imname = $("#selImage").val();
     };
 
 
@@ -151,12 +221,13 @@ $(document).ready(function() {
         $('#datasetTitle').text(dataset);
         ready_r = false;
         ready_l = false;
+        update_score_table();
+        update_image_list();
         update_left();
         update_right();
     });
 
     $('#selImage').change(function() {
-            console.log('change image')
         imname = $('#selImage').val();
         ready_r = false;
         ready_l = false;

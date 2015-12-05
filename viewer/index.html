@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="main.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
@@ -68,6 +69,18 @@
                         <td id="psnr_left">0 dB</td>
                     </tr>
                     <tr>
+                        <th>R</th>
+                        <td id="psnr_red_left">0 dB</td>
+                    </tr>
+                    <tr>
+                        <th>G</th>
+                        <td id="psnr_green_left">0 dB</td>
+                    </tr>
+                    <tr>
+                        <th>B</th>
+                        <td id="psnr_blue_left">0 dB</td>
+                    </tr>
+                    <tr>
                         <th>time</th>
                         <td id="time_left">0 ms</td>
                     </tr>
@@ -78,6 +91,18 @@
                     <tr>
                         <th>PSNR</th>
                         <td id="psnr_right">0 dB</td>
+                    </tr>
+                    <tr>
+                        <th>R</th>
+                        <td id="psnr_red_right">0 dB</td>
+                    </tr>
+                    <tr>
+                        <th>G</th>
+                        <td id="psnr_green_right">0 dB</td>
+                    </tr>
+                    <tr>
+                        <th>B</th>
+                        <td id="psnr_blue_right">0 dB</td>
                     </tr>
                     <tr>
                         <th>time</th>
@@ -91,9 +116,20 @@
                 <figure>
                     <div id="split_viewer"></div>
                     <figcaption>
-                        Move the divider to compare methods.
+                    <p>
+                        Move the divider to compare methods. <span id="scale_label"> 100 % </span>
+                    </p>
+                    <p>
+                        Shift-click to move the image, mouse-wheel to zoom
+                    </p>
                     </figcaption>
                 </figure>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <table id="score_table" class="table">
+                </table>
             </div>
         </div>
     </div>
