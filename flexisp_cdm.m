@@ -1,4 +1,4 @@
-function result_demosaic = flexisp_cdm(I)
+function result_demosaic = flexisp_cdm(I,Igt)
     addpath('2014_flexISP/3rdparty/BM3D') %%%% download from: http://www.cs.tut.fi/~foi/GCF-BM3D/, if you run into check_order error, you could download the check_order.m from here: https://searchcode.com/codesearch/view/13666439/
     addpath('2014_flexISP/3rdparty/LASIP_Image_Restoration_DemoBox_v113'); %%%% download from: http://www.cs.tut.fi/~lasip/2D/
     addpath('2014_flexISP/3rdparty/Gabriel_Peyre'); %%%% copy grad.m, getoption.m, div.m to this folder. download from: https://www.ceremade.dauphine.fr/~peyre/codes/
@@ -12,29 +12,29 @@ function result_demosaic = flexisp_cdm(I)
 
     %% Configuration
     % cfa pattern
+    % conf_cfa = 'grbg';
     conf_cfa = 'rggb';
 
     % configuration for primal dual optimization framework
     conf_pdopt_sigma_scale = 12.5;
-    conf_pdopt_lambda_reg  = 1.0;
+    conf_pdopt_lambda_reg  = 1.0; % BM3d prior
     conf_pdopt_max_iters   = 30;
 
     conf_lambda_channels = [[2000,   [0.0,  0.0, 0.0]]; ... %R
                             [2000,   [0.0,  0.0, 0.0]]; ... %G
                             [2000,   [0.0,  0.0, 0.0]]];    %B
 
-    %% Input images
-    % read in image
-    % I = im2double(I);
-    % I_raw_input = I;
-
     % generate raw format
     I_raw_input = generate_bayer(I, conf_cfa);
 
     % observed signal
     observed_input(:,:,1) = I_raw_input;
+
     % mask for the observed signal.
     observed_input(:,:,2) = ones(size(I_raw_input));
+
+    % imshow(demosaic( uint8(observed_input(:,:,1) * 255.0), conf_cfa));
+
     % initial guess
     initial_guess = double(demosaic( uint8(observed_input(:,:,1) * 255.0), conf_cfa)) / 255.0;
 
@@ -49,7 +49,7 @@ function result_demosaic = flexisp_cdm(I)
     for ch = 1:size(I,3)
         % no blur
         kernel_blur{ch} = zeros([blur_size, blur_size]);
-        kernel_blur{ch}( floor(blur_size/2) + 1, floor(blur_size/2) + 1 ) = 1; 
+        kernel_blur{ch}( floor(blur_size/2) + 1, floor(blur_size/2) + 1 ) = 1;  % dirac
         
         % channel patch
         channel_patch(ch).Image = observed_input(:, :, 1) .* channel_mask(:, :, ch);
@@ -67,7 +67,7 @@ function result_demosaic = flexisp_cdm(I)
     fprintf('data ready! run optimization\n');
     result = pd(channel_patch, initial_channel_patch, ...
                 conf_lambda_channels, conf_pdopt_lambda_reg, conf_pdopt_sigma_scale, conf_pdopt_max_iters , ...
-                1e-6, '.', 'brief', I);
+                1e-6, '.', 'brief', Igt);
 
     result_demosaic = cat(3, result(1).Image, result(2).Image, result(3).Image);
 
@@ -85,7 +85,7 @@ function result_demosaic = flexisp_cdm(I)
     % psnr_b = comppsnr(result_demosaic(sr:er, sc:ec, 3), I(sr:er, sc:ec, 3));
     %
     % fprintf('PSNR = [%.2f %.2f %.2f]\n', psnr_r, psnr_g, psnr_b);
-    %
+
     % figure(1);
     % imshow(result_demosaic);
     % pause(0.1)

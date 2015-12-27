@@ -20,13 +20,24 @@ function [ result ] = demosaickingMatrix( x, ch, sizeX, flag  )
     
 
     %Build G matrix
-    G_Mos = toeplitz( mod( 0:sizeX(1) - 1, 2), mod( 0:sizeX(2) - 1, 2) );
+    conf_cfa = 'rggb';
+    if conf_cfa == 'rggb'
+        G_Mos = toeplitz( mod( 0:sizeX(1) - 1, 2), mod( 0:sizeX(2) - 1, 2) );
 
-    R_Mos = toeplitz( mod( 1:sizeX(1), 2), mod( 1:sizeX(2), 2) ); 
-    R_Mos(2:2:end, :) = 0;
+        R_Mos = toeplitz( mod( 1:sizeX(1), 2), mod( 1:sizeX(2), 2) ); 
+        R_Mos(2:2:end, :) = 0;
 
-    B_Mos = toeplitz( mod( 1:sizeX(1), 2), mod( 1:sizeX(2), 2) ); 
-    B_Mos(1:2:end - 1, :) = 0;
+        B_Mos = toeplitz( mod( 1:sizeX(1), 2), mod( 1:sizeX(2), 2) ); 
+        B_Mos(1:2:end - 1, :) = 0;
+    elseif conf_cfa == 'grbg'
+        G_Mos = toeplitz( mod( 1:sizeX(1) , 2), mod( 1:sizeX(2) , 2) );
+
+        R_Mos = toeplitz( mod( 0:sizeX(1)-1, 2), mod( 0:sizeX(2)-1, 2) ); 
+        R_Mos(2:2:end, :) = 0;
+
+        B_Mos = toeplitz( mod( 0:sizeX(1)-1, 2), mod( 0:sizeX(2)-1, 2) ); 
+        B_Mos(1:2:end - 1, :) = 0;
+    end
 
     %Logical
     G_Mos = logical(G_Mos);

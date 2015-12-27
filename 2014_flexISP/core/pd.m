@@ -95,6 +95,7 @@ function [ db_chs ] = pd_channel_deconv(channels, db_chs, x_0, ...
     %Convert to an image for simplicity
     chImg =   cat( 3, channels(1).Image, channels(2).Image, channels(3).Image );
     dbchImg = cat( 3, db_chs(1).Image,     db_chs(2).Image,   db_chs(3).Image );
+
     
     %Shortcut for the TV norm.
     Amplitude = @(u)sqrt(u.^2);
@@ -104,6 +105,7 @@ function [ db_chs ] = pd_channel_deconv(channels, db_chs, x_0, ...
     
     %Lambda TV
     lambda_tv = 0.0; %5;
+    % lambda_tv = 0.1; %5;
     
     %Prox operator    
     %L1 norm
@@ -150,6 +152,7 @@ function [ db_chs ] = pd_channel_deconv(channels, db_chs, x_0, ...
     f = x_0;
     g = A(f);
     f1 = f;
+
         
     %Primal-Dual Iterative solver
     for i = 1:max_it
@@ -165,6 +168,7 @@ function [ db_chs ] = pd_channel_deconv(channels, db_chs, x_0, ...
         g = ProxFS( gp, sigma, i);
         f = ProxG( f - tau * AS(g), tau);
         f1 = f + theta * (f-fold);
+
         
         %Compute PSNR
         PSNR = 0;
@@ -183,6 +187,7 @@ function [ db_chs ] = pd_channel_deconv(channels, db_chs, x_0, ...
             end
             
         end
+
         
         %Save
         if ~isempty( output_folder )

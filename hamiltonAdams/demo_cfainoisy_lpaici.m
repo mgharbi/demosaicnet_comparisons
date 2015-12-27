@@ -37,7 +37,6 @@ for j=ImSet,
     %    R G R...
     %    G B G...
     
-    tic
     CFA_phaseshift = 1;
     noise = 1; % 1 - Poissonian; 2 - Gaussian; 3 - Heteroscedactic Gaussian (Hirakawa [ICIP, TIP 2005])
     Res = function_cfainoisy_lpaici(X,noise,CFA_phaseshift);

@@ -100,7 +100,6 @@ y=im2double(imread('image_Cameraman256.png'));
 % y=im2double(imread('image_Lena512.png'));
 % y=im2double(imread('image_Boats512.png'));
 
-tic
 init=0; %2055615866;
 randn('seed', init);
 %---------------------------------------------------------

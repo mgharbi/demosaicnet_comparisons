@@ -37,7 +37,6 @@ function [out_pocs, t] = d_pocs2(X, N_iter)
 % G R
 % B G
 
-tic
 
 %%%%% Initial interpolation of the color channels
 RGB = double(interp_edgeG(X));

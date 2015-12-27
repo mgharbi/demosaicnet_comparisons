@@ -246,7 +246,6 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% Apply the filtering MEX-subroutine
 %%%%
-tic;
 y_hat = bm3d_thr_sharpen_var(z, hadper_trans_single_den, Nstep, N1, N2, lambda_thr2D,...
          lambda_thr3D, tau_match*N1*N1/(255*255), (Ns-1)/2, (sigma/255), thrToIncStep, single(Tfor), single(Tinv)', inverse_hadper_trans_single_den, single(thr_mask), Wwin2D, smallLN, stepFS, 1/alpha_sharp );
 estimate_elapsed_time = toc;

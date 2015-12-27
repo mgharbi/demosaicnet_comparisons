@@ -26,6 +26,5 @@ L = kron(L, L');
 
 N = 2048; % for a quicker answer, use N = 256
 
-tic
 q = Lipschitz_const(L, (size(L) + [1 1])/2, N)
 toc

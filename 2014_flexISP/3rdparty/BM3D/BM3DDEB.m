@@ -168,7 +168,6 @@ end
 %%%% Create a blurred and noisy observation
 z = y_blur + sigma*randn(Xv,Xh);
 
-tic;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% Step 1: Final estimate by Regularized Inversion (RI) followed by
 %%%% BM3D with collaborative hard-thresholding

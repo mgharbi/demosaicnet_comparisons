@@ -37,7 +37,6 @@ for j=ImSet,
     %    R G R...
     %    G B G...
     
-    tic
     CFA_phaseshift = 1;
     Res = function_cfai_lpaici(Y,CFA_phaseshift);
     % Res = function_cfai_ha(Y,CFA_phaseshift);

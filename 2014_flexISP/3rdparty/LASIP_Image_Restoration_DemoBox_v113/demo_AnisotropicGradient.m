@@ -126,12 +126,10 @@ axes('position',[0.5 0.94 0.0001 0.0001]); axis off, title('Analytical "ideal" g
 %---------------------------------------------------------
 % LPA Kernels construction
 %---------------------------------------------------------    
-tic
 disp('Creating LPA Kernels...    ')
 [kernels, kernels_higher_order]=function_CreateLPAKernels(m,h1,h2,TYPE,window_type,ndir,sig_winds,beta);
 disp(sprintf(['\b\b Kernels created in ',num2str(toc),' sec.']))
 disp('Filtering (adaptive-scale directional derivatives) starts...    ')
-tic  
 %% Anisotropic Gradient Estimation Starts  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for s1=1:ndir     % loop on directions
     for s2=1:lenh     % loop on kernel sizes
@@ -152,7 +150,6 @@ end %% for s1, directions
 disp(sprintf(['\b\b Filtering completed in ',num2str(toc),' sec.'])) 
 %%% ENDO OF FILTERING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 disp('Anisotropic gradient is computed (least-squares)...   ');
-tic
 THETASTEP=2*pi/ndir;
 THETA=[0:THETASTEP:2*pi-THETASTEP];
 rcos=reshape(repmat(cos(THETA)',1,size_z_1*size_z_2)',[size_z_1 size_z_2 size(THETA,2)]);

@@ -354,7 +354,6 @@ end
 %%%% Step 1. Basic estimate by collaborative hard-thresholding and using
 %%%% the grouping constraint on the chrominances.
 %%%%
-tic;
 y_hat = bm3d_thr_color(zColSpace, hadper_trans_single_den, Nstep, N1, N2, lambda_thr2D,...
     lambda_thr3D, tau_match*N1*N1/(255*255), (Ns-1)/2, sigma/255, thrToIncStep, single(Tfor), single(Tinv)', inverse_hadper_trans_single_den, single(thr_mask), 'unused arg', 'unused arg', l2normLumChrom, Wwin2D, smallLN, stepFS );
 estimate_elapsed_time = toc;
@@ -370,7 +369,6 @@ yRGB_hat = double(min(1,max(0,yRGB_hat)));
 %%%% Step 2. Final estimate by collaborative Wiener filtering and using
 %%%% the grouping constraint on the chrominances.
 %%%%
-tic;
 yRGB_est = bm3d_wiener_color(zColSpace2, y_hat2, hadper_trans_single_den, Nstep_wiener, N1_wiener, N2_wiener, ...
     'unused_arg', tau_match_wiener*N1_wiener*N1_wiener/(255*255), (Ns_wiener-1)/2, sigma/255, 'unused arg', single(TforW), single(TinvW)', inverse_hadper_trans_single_den, 'unused arg', 'unused arg', l2normLumChrom, Wwin2D_wiener, smallLNW, stepFSW );
 wiener_elapsed_time = toc;

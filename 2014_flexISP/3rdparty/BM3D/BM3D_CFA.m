@@ -196,7 +196,6 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% Step 1. Produce the basic estimate by HT filtering
 %%%%
-tic;
 y_ht = bm3d_CFA_thr(z, hadper_trans_single_den, Nstep, N1, N2, lambda_thr2D,...
 	lambda_thr3D, tau_match*N1*N1/(255*255), (Ns-1)/2, (sigma/255), thrToIncStep, single(Tfor), single(Tinv)', inverse_hadper_trans_single_den, single(thr_mask), Wwin2D, smallLN, stepFS );
 estimate_elapsed_time = toc;
@@ -211,7 +210,6 @@ end
 %%%% Step 2. Produce the final estimate by Wiener filtering (using the 
 %%%%  hard-thresholding initial estimate)
 %%%%
-tic;
 y_wiener = bm3d_CFA_wiener(z, y_ht, hadper_trans_single_den, Nstep_wiener, N1_wiener, N2_wiener, ...
     'unused arg', tau_match_wiener*N1_wiener*N1_wiener/(255*255), (Ns_wiener-1)/2, (sigma/255), 'unused arg', single(TforW), single(TinvW)', inverse_hadper_trans_single_den, Wwin2D_wiener, smallLNW, stepFSW, single(ones(N1_wiener)) );
 wiener_elapsed_time = toc;

@@ -22,6 +22,7 @@ if strcmp(pattern, 'rggb')
     % blue
     b_mask(2:2:end, 2:2:end) = 1;
 elseif strcmp(pattern, 'grbg')
+    display('Using grbg pattern')
     % green
     g_mask(1:2:end, 1:2:end) = 1;
     g_mask(2:2:end, 2:2:end) = 1;

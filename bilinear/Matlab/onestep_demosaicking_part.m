@@ -37,7 +37,6 @@ function [xh, t] = onestep_demosaicking_part(x_bayer, flts_r, flts_b, approx_ran
 
 % Step 1: initial estimation of the green channel
 
-tic;
 
 x_bayer = double(x_bayer);
 

@@ -3,3 +3,4 @@ output/**
 .DS_Store
 _unused_data/
 iterations/
+_saved_output/

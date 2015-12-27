@@ -86,7 +86,6 @@ disp(' Demo: Creates LPA kernels ')
 disp('-----------------------------------------------------------------------------------')
 disp('  ')
 disp('Creating LPA kernels...  ')
-tic
 [kernels, kernels_higher_order]=function_CreateLPAKernels(m,h1,h2,TYPE,window_type,directional_resolution,sig_winds,beta);
 disp(sprintf('\b\b Kernels created.'))
 toc
